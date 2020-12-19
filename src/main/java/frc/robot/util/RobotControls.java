@@ -16,11 +16,12 @@ public class RobotControls {
   private static final int LEFT_DRIVER_JOYSTICK_ID = 0;
   private static final int RIGHT_DRIVER_JOYSTICK_ID = 1;
 
-  private static final int kDriveShiftButton = 11; 
+  private static final int kDriveShiftButton = 11;
+  private static final int kGripperButton = 0; // TODO: Get ID
+  private static final int kLifterButton = 0; // TODO: Get ID
 
-  
   private Joystick leftDriverJoystick;
-  private  Joystick rightDriverJoystick;
+  private Joystick rightDriverJoystick;
   private Joystick leftOperatorJoystick;
   private Joystick rightOperatorJoystick;
   private XboxController xboxController;
@@ -67,5 +68,15 @@ public class RobotControls {
   public boolean getShifterButton() {
     return useXbox ? xboxController.getBumper(Hand.kRight) :
         leftDriverJoystick.getRawButton(kDriveShiftButton);
+  }
+
+  public boolean getGripperButton() {
+    return useXbox ? xboxController.getAButton() :
+            rightDriverJoystick.getRawButton(kGripperButton);
+  }
+
+  public boolean getLifterButton() {
+    return useXbox ? xboxController.getYButton() :
+            rightDriverJoystick.getRawButton(kLifterButton);
   }
 }

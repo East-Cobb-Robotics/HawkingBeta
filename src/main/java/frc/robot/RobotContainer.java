@@ -4,15 +4,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DriveArcadeCommand;
-import frc.robot.commands.DriveTankCommand;
+import frc.robot.commands.intake.GripperCommand;
+import frc.robot.commands.intake.LifterCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.util.RobotControls;
-import java.util.Map;
 
 /**
  * Wraps all the subsystems and commands for the robot.
@@ -26,9 +25,12 @@ public class RobotContainer {
   // Subsystems //
   ////////////////
   private DriveSubsystem drive = new DriveSubsystem();
+  private IntakeSubsystem intake = new IntakeSubsystem();
   
   private RobotControls controls = new RobotControls(true);
   private Button shifterButton = new Button(controls::getShifterButton);
+  private Button gripperButton = new Button(controls::getGripperButton);
+  private Button lifterButton = new Button(controls::getLifterButton);
 
   private enum DriveType {
     TANK, ARCADE 
@@ -53,6 +55,9 @@ public class RobotContainer {
         () -> drive.setShifter(!drive.getShifter()),
         () -> {})
     );
+
+    gripperButton.whenPressed(new GripperCommand(gripperButton::get, intake));
+    lifterButton.whenPressed(new LifterCommand(lifterButton::get, intake));
   }
 
   /**
@@ -65,7 +70,7 @@ public class RobotContainer {
     // the user currently has selected.
     // Note that we only want to use one drive type in competition for performance.
 
-    // The selector right now give a null pointer excetpion. TODO: Look into.
+    // The selector right now give a null pointer exception. TODO: Look into.
     /*
     drive.setDefaultCommand(new SelectCommand(
         Map.ofEntries(
