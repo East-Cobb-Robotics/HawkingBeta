@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
@@ -104,8 +104,9 @@ public class DriveSubsystem extends SubsystemBase {
                                           HIGH_GEAR_GEARING,
                                           3,
                                           68,
+                                          WHEEL_DIAMETER / 2,
                                           EFFECTIVE_TRACK_WIDTH,
-                                          WHEEL_DIAMETER / 2);
+                                          null);
       
       field = new Field2d();
     } else {
@@ -153,10 +154,10 @@ public class DriveSubsystem extends SubsystemBase {
           rightMaster.get() * RobotController.getBatteryVoltage());
     sim.update(Robot.LOOP_TIME);
 
-    leftEncoderSim.setDistance(sim.getState(DifferentialDrivetrainSim.State.kLeftPosition));
-    leftEncoderSim.setSpeed(sim.getState(DifferentialDrivetrainSim.State.kLeftVelocity));
-    rightEncoderSim.setDistance(sim.getState(DifferentialDrivetrainSim.State.kRightPosition));
-    rightEncoderSim.setSpeed(sim.getState(DifferentialDrivetrainSim.State.kRightVelocity));
+    leftEncoderSim.setDistance(sim.getLeftPositionMeters());
+    leftEncoderSim.setSpeed(sim.getLeftVelocityMetersPerSecond());
+    rightEncoderSim.setDistance(sim.getRightPositionMeters());
+    rightEncoderSim.setSpeed(sim.getRightVelocityMetersPerSecond());
     gyroSim.setHeading(sim.getHeading());
 
     field.setRobotPose(getPose());
