@@ -1,5 +1,5 @@
 package frc.robot.util;
-
+  
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,9 +39,9 @@ public class RobotControls {
       xboxController = new XboxController(LEFT_DRIVER_JOYSTICK_ID);
     } else {
       leftDriverJoystick = new Joystick(LEFT_DRIVER_JOYSTICK_ID);
-      rightDriverJoystick = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
+      rightDriverJoystick = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
       leftOperatorJoystick = new Joystick(LEFT_OPERATOR_JOYSTICK_ID);
-      rightOperatorJoystick = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
+      rightOperatorJoystick = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
     }
   }
   
@@ -52,7 +52,7 @@ public class RobotControls {
 
   public double getLeftDriverY() {
     return useXbox ? -xboxController.getY(Hand.kLeft) :
-        leftDriverJoystick.getY(Hand.kLeft);
+        -leftDriverJoystick.getY(Hand.kLeft);
   }
 
   public double getRightDriverX() {
@@ -62,7 +62,7 @@ public class RobotControls {
 
   public double getRightDriverY() {
     return useXbox ? -xboxController.getRawAxis(3) :
-        rightDriverJoystick.getY(Hand.kRight);
+        -rightDriverJoystick.getY(Hand.kRight);
   }
 
   public boolean getShifterButton() {

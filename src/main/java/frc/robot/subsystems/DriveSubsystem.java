@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -15,9 +16,7 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.numbers.N2;
 import frc.robot.Robot;
 import frc.robot.util.NavX;
 import frc.robot.util.SimEncoder;
@@ -41,12 +40,6 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double KA_LINEAR = 0.03624; // TODO: Find out
   private static final double KV_ANGULAR = KV_LINEAR; // TODO: Find out
   private static final double KA_ANGULAR = KA_LINEAR; // TODO: Find out
-
-  private static final LinearSystem<N2, N2, N2> DRIVE_PLANT 
-      = LinearSystemId.identifyDrivetrainSystem(KV_LINEAR,
-                                                KA_LINEAR,
-                                                KV_ANGULAR,
-                                                KA_ANGULAR);
 
   private static final DCMotor GEAR_BOX = DCMotor.getCIM(2);
   private static final double HIGH_GEAR_GEARING = 8.6; // TODO: Measure
@@ -84,6 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
     leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1,
         (int) (Robot.LOOP_TIME * 1000));
     leftMaster.setSelectedSensorPosition(0);
+    leftMaster.setInverted(InvertType.InvertMotorOutput);
 
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     rightMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1,
@@ -93,6 +87,7 @@ public class DriveSubsystem extends SubsystemBase {
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
     setShifter(true);
+    leftSlave.setInverted(InvertType.FollowMaster);
 
     if (RobotBase.isSimulation()) {
       leftEncoderSim = new SimEncoder("Left Drive");
